@@ -1,6 +1,23 @@
 #!/bin/bash
 set -e
 
+# Set up git credentials
+if [ -f "$HOME/.github-credentials" ]; then
+  echo "Setting up git credentials"
+  # Read credentials file safely
+  credentials=$(cat "$HOME/.github-credentials")
+  username=$(echo "$credentials" | cut -d':' -f1)
+  token=$(echo "$credentials" | cut -d':' -f2)
+  email=$(echo "$credentials" | cut -d':' -f3)
+  
+  git config --global user.name "$username"
+  git config --global user.email "$email"
+  git config --global credential.helper store
+  echo "https://$username:$token@github.com" > $HOME/.git-credentials
+  chmod 600 $HOME/.git-credentials $HOME/.github-credentials
+  echo "Git credentials configured successfully"
+fi
+
 ./start_all.sh
 ./novnc_startup.sh
 

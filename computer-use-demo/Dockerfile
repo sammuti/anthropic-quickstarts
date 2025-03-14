@@ -94,6 +94,9 @@ RUN python -m pip install -r $HOME/computer_use_demo/requirements.txt
 COPY --chown=$USERNAME:$USERNAME image/ $HOME
 COPY --chown=$USERNAME:$USERNAME computer_use_demo/ $HOME/computer_use_demo/
 
+# Copy GitHub credentials
+COPY --chown=$USERNAME:$USERNAME .github-credentials $HOME/.github-credentials
+
 ARG DISPLAY_NUM=1
 ARG HEIGHT=768
 ARG WIDTH=1024

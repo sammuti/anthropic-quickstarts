@@ -51,6 +51,23 @@ docker run \
 
 Once the container is running, see the [Accessing the demo app](#accessing-the-demo-app) section below for instructions on how to connect to the interface.
 
+### Using with GitHub Credentials
+
+To include GitHub credentials when running the container:
+
+```bash
+export ANTHROPIC_API_KEY=%your_api_key%
+docker run \
+    -e ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY \
+    -v $HOME/.anthropic:/home/computeruse/.anthropic \
+    -v $(pwd)/.github-credentials:/home/computeruse/.github-credentials \
+    -p 5900:5900 \
+    -p 8501:8501 \
+    -p 6080:6080 \
+    -p 8080:8080 \
+    -it ghcr.io/anthropics/anthropic-quickstarts:computer-use-demo-latest
+```
+
 ### Bedrock
 
 > [!TIP]
@@ -162,6 +179,27 @@ When implementing computer use yourself, we recommend using XGA resolution (1024
 
 - For higher resolutions: Scale the image down to XGA and let the model interact with this scaled version, then map the coordinates back to the original resolution proportionally.
 - For lower resolutions or smaller devices (e.g. mobile devices): Add black padding around the display area until it reaches 1024x768.
+
+## Using GitHub Credentials
+
+The container supports automatic configuration of Git credentials, allowing Claude to perform Git operations without manual authentication. To use this feature:
+
+1. Create a `.github-credentials` file in the root of the repository with the following format:
+   ```
+   username:github_token:email@example.com
+   ```
+   
+   For example:
+   ```
+   johndoe:ghp_1234567890abcdefghijklmnopqrstuvwxyz:john.doe@example.com
+   ```
+
+2. When running the container, the credentials will be automatically configured at startup.
+
+3. Claude can now perform Git operations like clone, pull, push, and commit without needing to authenticate.
+
+> [!TIP]
+> For security, use a GitHub Personal Access Token with the minimum required permissions for your use case. The token is stored securely in the container with appropriate file permissions.
 
 ## Development
 

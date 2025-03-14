@@ -68,6 +68,8 @@ docker run \
     -it ghcr.io/anthropics/anthropic-quickstarts:computer-use-demo-latest
 ```
 
+See the [Using GitHub Credentials](#using-github-credentials) section for details on creating and formatting the credentials file.
+
 ### Bedrock
 
 > [!TIP]
@@ -184,7 +186,15 @@ When implementing computer use yourself, we recommend using XGA resolution (1024
 
 The container supports automatic configuration of Git credentials, allowing Claude to perform Git operations without manual authentication. To use this feature:
 
-1. Create a `.github-credentials` file in the root of the repository with the following format:
+1. Create a GitHub Personal Access Token:
+   - Go to GitHub → Settings → Developer settings → [Personal access tokens](https://github.com/settings/tokens)
+   - Click "Generate new token" (classic)
+   - Give your token a descriptive name
+   - Select the necessary scopes (at minimum: `repo` for private repositories or `public_repo` for public repositories)
+   - Click "Generate token"
+   - Copy the token immediately (you won't be able to see it again)
+
+2. Create a `.github-credentials` file in the root of the repository with the following format:
    ```
    username:github_token:email@example.com
    ```
@@ -194,12 +204,15 @@ The container supports automatic configuration of Git credentials, allowing Clau
    johndoe:ghp_1234567890abcdefghijklmnopqrstuvwxyz:john.doe@example.com
    ```
 
-2. When running the container, the credentials will be automatically configured at startup.
+3. When running the container, the credentials will be automatically configured at startup.
 
-3. Claude can now perform Git operations like clone, pull, push, and commit without needing to authenticate.
+4. Claude can now perform Git operations like clone, pull, push, and commit without needing to authenticate.
 
 > [!TIP]
 > For security, use a GitHub Personal Access Token with the minimum required permissions for your use case. The token is stored securely in the container with appropriate file permissions.
+
+> [!IMPORTANT]
+> Never commit your `.github-credentials` file to version control. Add it to your `.gitignore` file to prevent accidental commits.
 
 ## Development
 

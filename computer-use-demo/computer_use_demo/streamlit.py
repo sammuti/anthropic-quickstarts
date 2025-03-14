@@ -110,6 +110,10 @@ def setup_state():
         st.session_state.provider_radio = st.session_state.provider
     if "model" not in st.session_state:
         _reset_model()
+    # Always ensure Claude 3.7 Sonnet is selected for Anthropic provider
+    if st.session_state.provider == APIProvider.ANTHROPIC:
+        st.session_state.model = "claude-3-7-sonnet-20250219"
+        _reset_model_conf()
     if "auth_validated" not in st.session_state:
         st.session_state.auth_validated = False
     if "responses" not in st.session_state:
@@ -207,7 +211,7 @@ async def main():
         versions = get_args(ToolVersion)
         st.radio(
             "Tool Versions",
-            key="tool_versions",
+            key="tool_version",
             options=versions,
             index=versions.index(st.session_state.tool_version),
         )
